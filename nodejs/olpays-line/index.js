@@ -37,8 +37,47 @@ var getPayments = (page, from, to) => {
 
 }
 
+var getPayment = (id) => {
+    let getUri = olpaysUri + 'payments/' + id;
+    var options = {
+        uri: getUri,
+        headers: {
+            'Authorization': 'Basic ' + base64.encode(utf8.enconde(pubKey + ':' + privKey))
+        },
+        json: true // Automatically parses the JSON string in the response
+    };
+    return new Promise(function (resolve, reject) {
+        rp(options)
+            .then(function (parsedBody) {
+                resolve(parsedBody);
+            })
+            .catch(function (err) {
+                reject(err);
+            });
+    });
+
+}
+
+var getCreditCardTypes = () => {
+    let getUri = olpaysUri + 'public/payment/creditcard/types';
+    var options = {
+        uri: getUri,
+    };
+    return new Promise(function (resolve, reject) {
+        rp(options)
+            .then(function (parsedBody) {
+                resolve(parsedBody);
+            })
+            .catch(function (err) {
+                reject(err);
+            });
+    });
+
+}
 
 module.exports = {
+    getCreditCardTypes,
     getPayments,
+    getPayment,
     init
 }
